@@ -1,0 +1,194 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>图书馆里系统</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/comm.css">
+
+    <script src="/webjars/jquery/3.5.1/jquery.js"></script>
+    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
+    <script src="/js/net.js"></script>
+
+    <style>
+        .student-item {
+            display: grid;
+            grid-template-columns: 60px 1fr 1fr 1fr 1fr 2fr 60px 120px;
+            line-height: 32px;
+        }
+
+        .student-item-head {
+            font-weight: bold;
+        }
+
+        .student-item > div {
+            border: gray 1px solid;
+            text-align: center;
+        }
+
+        .student-item > input {
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        var index = 1
+
+        function addItem() {
+            $("#teacher-list").append(`<div class="student-item" id="${index}">
+<div class="index"><b>${index}</b></div>
+<input class="uid" type="text" placeholder="请输入登录账号">
+<input class="password" type="password" placeholder="请输入登录密码">
+<input class="name" type="text" placeholder="请输入学生姓名">
+<input class="sid" type="text" placeholder="请输入班级学号">
+<input class="des" type="text" placeholder="请输入描述">
+<select class="gender">
+<option value="0">隐藏</option>
+<option value="1">男</option>
+<option value="2">女</option>
+</select>
+<div>
+<a href="#" class="blue rand">随机</a>
+<a href="#" class="blue show">显示</a>
+<a href="#" class="red delete">删除</a>
+</div>
+</div>`);
+            var id = `#${index}`
+            $(id).find(".delete").on("click", function () {
+                $(id).remove();
+            });
+            $(id).find(".show").on("click", function () {
+                var p = $(id).find(".password");
+                var type = p.attr("type");
+                if (type === "password") {
+                    p.attr("type", "text");
+                } else {
+                    p.attr("type", "password");
+                }
+            });
+            $(id).find(".rand").on("click", function () {
+                var p = $(id).find(".password");
+                p.val(Math.round(Math.random() * 100000000))
+            });
+            index++;
+        }
+
+        function saveAll() {
+            var list = []
+            $(".student-item:not(.student-item-head)").each((i, item) => {
+                var o = $(item);
+                list.push({
+                    index: o.children(".index").text(),
+                    uid: o.children(".uid").val(),
+                    password: o.children(".password").val(),
+                    name: o.children(".name").val(),
+                    sid: o.children(".sid").val(),
+                    des: o.children(".des").val(),
+                    gender: o.children(".gender").val()
+                });
+            });
+            net.post({
+                url: "/admin/student/all",
+                json: list,
+                toast: true,
+                reload: true
+            })
+        }
+
+        function deleteTeacher(uid) {
+            if (confirm("你确定要删除这个教师?")) {
+                net.delete({
+                    url: "/admin/teacher",
+                    data: {uid: uid},
+                    toast: true,
+                    reload: true
+                })
+            }
+        }
+
+        function saveName(bt) {
+            net.put({
+                url: "/admin/teacher/name",
+                data: {
+                    uid: $(bt).attr("uid"),
+                    name: $(bt).prev().val()
+                },
+                toast: true,
+                reload: true
+            })
+        }
+
+        function saveDes(bt) {
+            net.put({
+                url: "/admin/teacher/des",
+                data: {
+                    uid: $(bt).attr("uid"),
+                    des: $(bt).prev().val()
+                },
+                toast: true,
+                reload: true
+            })
+        }
+
+        function getPassword(uid) {
+            net.get({
+                url: "/admin/teacher/password?uid=" + uid,
+                toast: true,
+                success: function (v) {
+                    alert(v)
+                }
+            })
+        }
+
+        function setPassword(uid) {
+            if (confirm("你确定要重置这个教师账号的密码吗?")) {
+                net.put({
+                    url: "/admin/teacher/password",
+                    data: {
+                        uid: uid,
+                        password: Math.round(Math.random() * 100000000)
+                    },
+                    toast: true,
+                    reload: true
+                })
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div th:replace="common/admin::navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="common/admin::sidebarMenu"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">待添加学生账号列表</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addItem()">添加条目</button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="saveAll()">保存所有数据</button>
+                </div>
+            </div>
+            <div style="height: 80vh;overflow: scroll;">
+                <div class="student-item student-item-head">
+                    <div>序号</div>
+                    <div>账号(4-32位)</div>
+                    <div>密码(4-32位)</div>
+                    <div>学生姓名(30个字符以内)</div>
+                    <div>班级学号(30个字符以内)</div>
+                    <div>描述(300个字符以内)</div>
+                    <div>性别</div>
+                    <div>操作</div>
+                </div>
+                <div id="teacher-list"></div>
+            </div>
+        </main>
+    </div>
+</div>
+
+</body>
+</html>
