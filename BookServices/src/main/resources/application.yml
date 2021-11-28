@@ -21,6 +21,9 @@ spring:
           content:
             paths: /**
             enabled: true
+book:
+  cover:
+    file-path: D:/bookManger/cover
 #mybatis-plus:
 #  configuration:
 #    map-underscore-to-camel-case: true

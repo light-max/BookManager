@@ -39,7 +39,7 @@ public class StudentController {
     }
 
     @GetMapping("/admin/student/add")
-    @ViewModelParameter(key = "view", value = "student")
+    @ViewModelParameter(key = "view", value = "student_add")
     public String addStudent(Model model) {
         return "/admin/student_add";
     }

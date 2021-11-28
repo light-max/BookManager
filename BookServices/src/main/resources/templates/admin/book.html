@@ -1,0 +1,193 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>图书馆里系统</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/comm.css">
+
+    <script src="/webjars/jquery/3.5.1/jquery.js"></script>
+    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
+    <script src="/js/net.js"></script>
+
+    <style>
+        .st {
+            line-height: 24px;
+        }
+
+        tr > img {
+            width: 120px;
+            height: 200px;
+        }
+
+        #list {
+            overflow: scroll;
+            height: 66vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .item {
+            box-sizing: border-box;
+            border: 1px solid gray;
+            display: grid;
+            height: 200px;
+            grid-template-areas: "icon id e d" "icon name . ." "icon author . ." "icon des des des";
+            grid-template-columns: auto 1fr auto auto;
+            grid-template-rows: auto auto auto 1fr;
+            grid-column-gap: 12px;
+            grid-row-gap: 2px;
+        }
+
+        .icon {
+            width: 140px;
+            height: 200px;
+            grid-area: icon;
+        }
+
+        .id {
+            line-height: 32px;
+            font-size: 24px;
+            grid-area: id;
+            font-weight: bold;
+        }
+
+        .e {
+            grid-area: e;
+            line-height: 32px;
+        }
+
+        .d {
+            grid-area: d;
+            line-height: 32px;
+            margin-right: 8px;
+        }
+
+        .name {
+            grid-area: name;
+            line-height: 24px;
+            font-weight: bold;
+        }
+
+        .author {
+            grid-area: author;
+            line-height: 24px;
+        }
+
+        .des {
+            grid-area: des;
+            overflow: scroll;
+            color: gray;
+        }
+    </style>
+
+    <script>
+        function deleteBook(id) {
+            if (confirm("你确定要删除这本?")) {
+                net.delete({
+                    url: "/admin/book",
+                    data: {id: id},
+                    toast: true,
+                    reload: true
+                })
+            }
+        }
+
+        function saveName(bt) {
+            net.put({
+                url: "/admin/student/name",
+                data: {
+                    uid: $(bt).attr("uid"),
+                    name: $(bt).prev().val()
+                },
+                toast: true,
+                reload: true
+            })
+        }
+
+        function saveDes(bt) {
+            net.put({
+                url: "/admin/student/des",
+                data: {
+                    uid: $(bt).attr("uid"),
+                    des: $(bt).prev().val()
+                },
+                toast: true,
+                reload: true
+            })
+        }
+
+        function search() {
+            var name = $("#search_name").val();
+            var author = $("#search_author").val();
+            var des = $("#search_des").val()
+            var a = [];
+            if (name.trim().length !== 0) {
+                a.push({key: 'name', value: name})
+            }
+            if (author.trim().length !== 0) {
+                a.push({key: 'author', value: author})
+            }
+            if (des.trim().length !== 0) {
+                a.push({key: 'des', value: des})
+            }
+            var url = "/admin/book";
+            if (a.length > 0) {
+                url += "?" + a[0].key + "=" + a[0].value;
+            }
+            for (let i = 1; i < a.length; i++) {
+                url += "&" + a[i].key + "=" + a[i].value
+            }
+            window.location.href = url
+        }
+    </script>
+</head>
+<body>
+
+<div th:replace="common/admin::navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="common/admin::sidebarMenu"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">馆藏图书</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <label class="st"><b>书名：</b>
+                        <input type="text" placeholder="输入检索关键字查询" id="search_name" th:value="${name}">&nbsp;
+                    </label>
+                    <label class="st">&nbsp;&nbsp;&nbsp;<b>作者：</b>
+                        <input type="text" placeholder="输入检索关键字查询" id="search_author" th:value="${author}">&nbsp;
+                    </label>
+                    <label class="st">&nbsp;&nbsp;&nbsp;<b>简介：</b>
+                        <input type="text" placeholder="输入检索关键字查询" id="search_des" th:value="${des}">&nbsp;
+                    </label>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="search()">检索</button>&nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
+                            data-target="#add" onclick="window.location.href='/admin/book/add'">添加书籍
+                    </button>
+                </div>
+            </div>
+            <div id="list">
+                <div class="item" th:each="i:${list}">
+                    <img class="icon" th:src="'/cover/book/'+${i.id}">
+                    <div class="id">ID: [[${i.id}]]</div>
+                    <a class="e blue" th:href="'/admin/book/update/'+${i.id}">编辑</a>
+                    <a class="d red" href="#">删除</a>
+                    <div class="name" th:text="${i.name}"></div>
+                    <div class="author" th:text="${i.author}"></div>
+                    <div class="des" th:text="${i.des}"></div>
+                </div>
+            </div>
+            <hr>
+            <div th:replace="common/admin::page"></div>
+            <br>
+        </main>
+    </div>
+</div>
+
+</body>
+</html>

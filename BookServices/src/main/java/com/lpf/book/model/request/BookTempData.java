@@ -1,24 +1,15 @@
-package com.lpf.book.model.entity;
+package com.lpf.book.model.request;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.lpf.book.plugin.fieldcheck.annotation.NumberMax;
+import com.lpf.book.plugin.fieldcheck.annotation.NumberMin;
 import com.lpf.book.plugin.fieldcheck.annotation.StringLengthMax;
 import com.lpf.book.plugin.fieldcheck.annotation.StringNonNull;
 import com.lpf.book.plugin.fieldcheck.interfaces.FieldCheckInterface;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@TableName("t_book")
-public class Book implements FieldCheckInterface<Book> {
-    @TableId(type = IdType.AUTO)
-    private Integer id;
+@Getter
+public class BookTempData implements FieldCheckInterface<BookTempData> {
+    private String index;
 
     @StringNonNull("书籍名称不能为空")
     @StringLengthMax(msg = "书籍名称不能超过${value}个字符", value = 100)
@@ -30,5 +21,9 @@ public class Book implements FieldCheckInterface<Book> {
     @StringLengthMax(msg = "书籍简介不能超过${value}个字符", value = 1000)
     private String des;
 
-    private Integer flag;
+    @NumberMin(msg = "至少要包含${value}本书", value = 1)
+    @NumberMax(msg = "每次最多设置${value}本书", value = 1000)
+    private Integer number = 0;
+
+    private Boolean use = true;
 }

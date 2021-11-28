@@ -30,9 +30,21 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link font-weight-bold text-light" th:classappend="${view=='student_add'?'active':''}"
+                   href="/admin/student/add">
+                    添加学生账号
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link font-weight-bold text-light" th:classappend="${view=='book'?'active':''}"
                    href="/admin/book">
                     馆藏书籍管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold text-light" th:classappend="${view=='book_add'?'active':''}"
+                   href="/admin/book/add">
+                    添加馆藏书籍
                 </a>
             </li>
             <li class="nav-item">

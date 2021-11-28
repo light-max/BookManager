@@ -93,7 +93,9 @@
                 url: "/admin/student/all",
                 json: list,
                 toast: true,
-                reload: true
+                success: function () {
+                    window.location.href = "/admin/student";
+                }
             })
         }
 
