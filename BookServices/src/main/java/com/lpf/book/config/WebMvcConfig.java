@@ -1,6 +1,7 @@
 package com.lpf.book.config;
 
 import com.lpf.book.config.interceptor.GlobalInterceptor;
+import com.lpf.book.config.interceptor.StudentInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -14,6 +15,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //                .addPathPatterns("/admin/**")
 //                .excludePathPatterns("/admin/login")
 //                .excludePathPatterns("/admin/notloggedin");
+        registry.addInterceptor(new StudentInterceptor())
+                .addPathPatterns("/student/**")
+                .excludePathPatterns("/student/login")
+                .excludePathPatterns("/student/notloggedin");
         registry.addInterceptor(new GlobalInterceptor())
                 .addPathPatterns("/**");
     }
