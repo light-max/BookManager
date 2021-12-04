@@ -14,4 +14,8 @@ public interface BorrowService extends IService<Borrow> {
     void borrowBook(StudentBorrowData data);
 
     List<BorrowTD> get(List<Borrow> borrows);
+
+    void agreeBorrow(Integer id);
+
+    void refuseBorrow(Integer id);
 }

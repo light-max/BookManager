@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
      * 是否打印断言异常
      */
 //    @Value("${mobileoffice.global-exception.assert-exception}")
-    private Boolean assertException = false;
+    private Boolean assertException = true;
 
     /**
      * 处理断言异常
@@ -25,6 +25,7 @@ public class GlobalExceptionHandler {
     public Result<Object> handlerAssertException(AssertException e) {
         if (assertException) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return Result.error(e.getMessage());
     }

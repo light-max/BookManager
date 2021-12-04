@@ -44,55 +44,55 @@ public class StudentController {
         return "/admin/student_add";
     }
 
-    @PostMapping("/admin/student/all")
+    @PostMapping({"/admin/student/all", "/teacher/student/all"})
     @ResponseBody
     @UseDefaultSuccessResponse
     public void add(@RequestBody List<StudentTempData> students) {
         service.saveStudents(students);
     }
 
-    @GetMapping("/admin/student/password")
+    @GetMapping({"/admin/student/password", "/teacher/student/password"})
     @ResponseBody
     public Result<String> getPassword(String uid) {
         return Result.success(service.getPassword(uid));
     }
 
-    @PutMapping("/admin/student/password")
+    @PutMapping({"/admin/student/password", "/teacher/student/password"})
     @ResponseBody
     @UseDefaultSuccessResponse
     public void setPassword(String uid, String password) {
         service.setPassword(uid, password);
     }
 
-    @PutMapping("/admin/student/name")
+    @PutMapping({"/admin/student/name", "/teacher/student/name"})
     @ResponseBody
     @UseDefaultSuccessResponse
     public void setName(String uid, String name) {
         service.setName(uid, name);
     }
 
-    @PutMapping("/admin/student/sid")
+    @PutMapping({"/admin/student/sid", "/teacher/student/sid"})
     @ResponseBody
     @UseDefaultSuccessResponse
     public void setSid(String uid, String sid) {
         service.setSid(uid, sid);
     }
 
-    @PutMapping("/admin/student/des")
+    @PutMapping({"/admin/student/des", "/teacher/student/des"})
     @ResponseBody
     @UseDefaultSuccessResponse
     public void setDes(String uid, String des) {
         service.setDes(uid, des);
     }
 
-    @PutMapping("/admin/student/gender")
+    @PutMapping({"/admin/student/gender", "/teacher/student/gender"})
     @ResponseBody
     @UseDefaultSuccessResponse
     public void setGender(String uid, Integer gender) {
         service.setGender(uid, gender);
     }
 
-    @DeleteMapping("/admin/student")
+    @DeleteMapping({"/admin/student", "/teacher/student"})
     @ResponseBody
     @UseDefaultSuccessResponse
     public void deleteStudent(String uid) {

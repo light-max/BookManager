@@ -56,7 +56,7 @@
                 form.append("all", $("input[name='mode1']:checked").val())
 
                 var settings = {
-                    "url": "/admin/cover/book/1001",
+                    "url": "/admin/cover/book/" + $("#id").val(),
                     "method": "POST",
                     "dataType": "json",
                     "timeout": 0,

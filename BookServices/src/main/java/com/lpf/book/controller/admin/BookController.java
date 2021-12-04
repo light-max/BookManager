@@ -56,7 +56,6 @@ public class BookController {
             }
             pager.setTailAppend(append);
         }
-        System.out.println(list.size());
         model.addAttribute("pager", pager);
         model.addAttribute("list", list);
         model.addAttribute("name", name);

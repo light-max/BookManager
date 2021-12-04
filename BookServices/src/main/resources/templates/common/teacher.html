@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="zh">
 <nav th:fragment="navbar" class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/admin">移动数字图书馆后台系统</a>
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/teacher">移动数字图书馆后台系统</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
             data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -9,7 +9,7 @@
     <div class="w-100"></div>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="/admin/logout">退出登陆</a>
+            <a class="nav-link" href="/teacher/logout">退出登陆</a>
         </li>
     </ul>
 </nav>
@@ -18,50 +18,20 @@
     <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column mb-2">
             <li class="nav-item">
-                <a class="nav-link font-weight-bold text-light" th:classappend="${view=='teacher'?'active':''}"
-                   href="/admin/teacher">
-                    教师账号管理
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link font-weight-bold text-light" th:classappend="${view=='student'?'active':''}"
-                   href="/admin/student">
-                    学生账号管理
+                   href="/teacher/student">
+                    学生管理
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link font-weight-bold text-light" th:classappend="${view=='student_add'?'active':''}"
-                   href="/admin/student/add">
+                   href="/teacher/student/add">
                     添加学生账号
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link font-weight-bold text-light" th:classappend="${view=='book'?'active':''}"
-                   href="/admin/book">
-                    馆藏书籍管理
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link font-weight-bold text-light" th:classappend="${view=='book_add'?'active':''}"
-                   href="/admin/book/add">
-                    添加馆藏书籍
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link font-weight-bold text-light" th:classappend="${view=='borrow'?'active':''}"
-                   href="/admin/borrow">
-                    借书申请
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link font-weight-bold text-light" th:classappend="${view=='retu'?'active':''}"
-                   href="/admin/retu">
-                    还书申请
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link font-weight-bold text-light" th:classappend="${view=='novel'?'active':''}"
-                   href="/admin/novel">
+                   href="/teacher/novel">
                     电子书籍管理
                 </a>
             </li>

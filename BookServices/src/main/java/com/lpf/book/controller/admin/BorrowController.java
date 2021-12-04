@@ -4,12 +4,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lpf.book.model.data.Pager;
 import com.lpf.book.model.entity.Borrow;
 import com.lpf.book.service.BorrowService;
+import com.lpf.book.util.UseDefaultSuccessResponse;
 import com.lpf.book.util.ump.ViewModelParameter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -35,5 +34,19 @@ public class BorrowController {
         model.addAttribute("list", service.get(list));
         model.addAttribute("status", status);
         return "/admin/borrow";
+    }
+
+    @PostMapping("/admin/borrow/agree")
+    @ResponseBody
+    @UseDefaultSuccessResponse
+    public void agree(Integer id) {
+        service.agreeBorrow(id);
+    }
+
+    @PostMapping("/admin/borrow/refuse")
+    @ResponseBody
+    @UseDefaultSuccessResponse
+    public void refuse(Integer id) {
+        service.refuseBorrow(id);
     }
 }

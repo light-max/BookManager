@@ -1,0 +1,25 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>图书管理系统</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
+</head>
+<body style="background: url(/img/bg.jpg);">
+
+<div th:replace="common/teacher::navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="common/teacher::sidebarMenu"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <h1 style="margin-top: 40px;color: white" class="display-4">移动数字图书馆 - 教师窗口</h1>
+        </main>
+    </div>
+</div>
+
+</body>
+</html>

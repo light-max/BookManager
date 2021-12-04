@@ -28,6 +28,8 @@ public enum GlobalConstant implements Assert {
     resourceEmpty("没有资源文件"),
 
     borrowError("这本书已经被人借走了捏"),
+
+    novelExists("同名电子资源已存在，不可重复添加"),
     ;
 
     private String message;

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lpf.book.constant.GlobalConstant;
 import com.lpf.book.mapper.*;
+import com.lpf.book.model.entity.Account;
 import com.lpf.book.model.entity.Book;
 import com.lpf.book.model.entity.Borrow;
 import com.lpf.book.model.request.StudentBorrowData;
@@ -71,12 +72,66 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
                 .build());
     }
 
+
     @Override
     public List<BorrowTD> get(List<Borrow> borrows) {
+        final String[] statuses = new String[]{
+                "待处理",
+                "已同意",
+                "已拒绝",
+                "已过期",
+                "已被使用",
+        };
         List<BorrowTD> list = new ArrayList<>();
         for (Borrow b : borrows) {
-            list.add(BorrowTD.builder().build());
+            Account account = accountMapper.selectById(b.getUid());
+            String name = account.getUid();
+            if (account.getType() == 1) {
+                name = teacherMapper.selectById(account.getUid()).getName();
+            } else if (account.getType() == 2) {
+                name = studentMapper.selectById(account.getUid()).getName();
+            }
+            Book book = bookMapper.selectById(b.getBookId());
+            list.add(BorrowTD.builder()
+                    .id(b.getId())
+                    .uid(b.getUid())
+                    .name(name)
+                    .bookId(b.getBookId())
+                    .bookName(book.getName())
+                    .bookAuthor(book.getAuthor())
+                    .statues(statuses[b.getStatus()])
+                    .time(String.format("%s-%s %d天",
+                            b.getBegin(),
+                            b.getEnd(),
+                            LocalDate.parse(b.getEnd(), dateFormat).toEpochDay() - LocalDate.parse(b.getBegin(), dateFormat).toEpochDay()
+                    ))
+                    .build());
         }
         return list;
+    }
+
+    @Override
+    public void agreeBorrow(Integer id) {
+        Borrow borrow = getById(id);
+        GlobalConstant.dataNotExists.notNull(borrow);
+        GlobalConstant.borrowError.isNull(getOne(new QueryWrapper<Borrow>()
+                .lambda()
+                .eq(Borrow::getStatus, 1)
+                .eq(Borrow::getBookId, borrow.getBookId())
+        ));
+        GlobalConstant.error.isTrue(borrow.getStatus() == 0);
+        borrow.setStatus(1);
+        borrow.setFinish(System.currentTimeMillis());
+        updateById(borrow);
+    }
+
+    @Override
+    public void refuseBorrow(Integer id) {
+        Borrow borrow = getById(id);
+        GlobalConstant.dataNotExists.notNull(borrow);
+        GlobalConstant.error.isTrue(borrow.getStatus() == 0);
+        borrow.setStatus(2);
+        borrow.setFinish(System.currentTimeMillis());
+        updateById(borrow);
     }
 }

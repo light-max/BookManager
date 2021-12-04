@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class BorrowTD {
+public class RetuTD {
     private Integer id;
     private String uid;
     private String name;
@@ -13,5 +13,5 @@ public class BorrowTD {
     private String bookName;
     private String bookAuthor;
     private String time;
-    private String statues;
+    private String status;
 }

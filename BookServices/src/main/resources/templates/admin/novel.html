@@ -1,0 +1,236 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>图书馆里系统</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/comm.css">
+
+    <script src="/webjars/jquery/3.5.1/jquery.js"></script>
+    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
+    <script src="/js/net.js"></script>
+
+    <style>
+        #list {
+            /*max-height: 66vh;*/
+            /*overflow: scroll;*/
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: repeat(auto-fill, auto);
+            gap: 8px;
+        }
+
+        .item {
+            border: 1px solid gray;
+            display: grid;
+            grid-template-areas: "icon name e d" "icon count . ." "icon uid . ." "icon aName . ." "icon aType . .";
+            grid-template-columns: auto 1fr auto auto;
+            grid-template-rows: auto auto auto auto auto;
+            grid-column-gap: 16px;
+        }
+
+        .icon {
+            grid-area: icon;
+            width: 140px;
+            height: 200px;
+        }
+
+        .name {
+            grid-area: name;
+            margin-top: 12px;
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 32px;
+        }
+
+        .name > a {
+            color: black;
+        }
+
+        .e {
+            grid-area: e;
+            margin-top: 12px;
+            line-height: 32px;
+            font-size: 16px;
+        }
+
+        .d {
+            grid-area: d;
+            margin-top: 12px;
+            margin-right: 12px;
+            line-height: 32px;
+            font-size: 16px;
+        }
+
+        .count {
+            grid-area: count;
+            font-size: 16px;
+        }
+
+        .uid {
+            grid-area: uid;
+            font-size: 16px;
+        }
+
+        .aName {
+            grid-area: aName;
+            font-size: 16px;
+        }
+
+        .aType {
+            grid-area: aType;
+            font-size: 16px;
+        }
+    </style>
+
+    <script>
+        function addNovel() {
+            var file = $("#file").val()
+            if (file == null || file === '') {
+                alert("请选择文件")
+            } else {
+                var form = new FormData();
+                form.append("file", document.getElementById("file").files[0], file);
+
+                var settings = {
+                    "url": "/admin/novel",
+                    "method": "POST",
+                    "dataType": "json",
+                    "timeout": 0,
+                    "processData": false,
+                    "mimeType": "multipart/form-data",
+                    "contentType": false,
+                    "data": form
+                };
+
+                $.ajax(settings).done(function (result) {
+                    console.log(result)
+                    if (result.success) {
+                        alert("修改成功")
+                        window.location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                });
+            }
+        }
+
+        function showCover(id) {
+            $("#c").modal("toggle")
+            $("#name").val(id);
+        }
+
+        function saveCover() {
+            net.post({
+                url: "/admin/cover/novel/" + $("#name").val(),
+                data: {file: document.getElementById("cover").files[0]},
+                toast: true,
+                reload: true
+            })
+        }
+
+        function deleteNovel(id) {
+            if (confirm("你确定要删除这本书？")) {
+                net.delete({
+                    url: "/admin/novel",
+                    data: {name: id},
+                    reload: true,
+                    toast: true
+                })
+            }
+        }
+
+        function search() {
+            var w = $("#w").val();
+            if (w === "") {
+                window.location.href = "/admin/novel";
+            } else {
+                window.location.href = "/admin/novel?w=" + w;
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div th:replace="common/admin::navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="common/admin::sidebarMenu"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">电子资源列表</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <input id="w" th:value="${w}" type="text" placeholder="请输入检索关键字">&nbsp;&nbsp;
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="search()">检索</button>&nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
+                            data-target="#add">添加电子书
+                    </button>
+                </div>
+            </div>
+            <div id="list">
+                <div class="item" th:each="item:${list}">
+                    <img class="icon" th:src="'/cover/novel/'+${item.name}">
+                    <div class="name">
+                        <a target="_blank" th:text="${item.name}" th:href="'/novel/txt/'+${item.name}"></a>
+                    </div>
+                    <a class="blue e" href="#" th:onclick="showCover([[${item.name}]])">修改封面</a>
+                    <a class="red d" href="#" th:onclick="deleteNovel([[${item.name}]])">删除</a>
+                    <div class="count">字数：[[${item.count}]]</div>
+                    <div class="uid">添加账号：[[${item.uid}]]</div>
+                    <div class="aName">添加人：[[${item.AName}]]</div>
+                    <div class="aType">账号类型：[[${item.AType}]]</div>
+                </div>
+            </div>
+            <hr>
+            <div th:replace="common/admin::page"></div>
+            <br>
+        </main>
+    </div>
+</div>
+
+</body>
+</html>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加电子资源</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow: scroll;height: 50vh">
+                <input type="file" accept="text/plain" id="file">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="addNovel()">提交</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="c" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">修改封面</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow: scroll;height: 50vh">
+                电子书：<input id="name" readonly type="text"><br><br>
+                <input type="file" accept="image/*" id="cover">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveCover()">提交</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -90,11 +90,11 @@
                 });
             });
             net.post({
-                url: "/admin/student/all",
+                url: "/teacher/student/all",
                 json: list,
                 toast: true,
                 success: function () {
-                    window.location.href = "/admin/student";
+                    window.location.href = "/teacher/student";
                 }
             })
         }
@@ -102,10 +102,10 @@
 </head>
 <body>
 
-<div th:replace="common/admin::navbar"></div>
+<div th:replace="common/teacher::navbar"></div>
 <div class="container-fluid">
     <div class="row">
-        <div th:replace="common/admin::sidebarMenu"></div>
+        <div th:replace="common/teacher::sidebarMenu"></div>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
