@@ -30,6 +30,8 @@ public enum GlobalConstant implements Assert {
     borrowError("这本书已经被人借走了捏"),
 
     novelExists("同名电子资源已存在，不可重复添加"),
+
+    collectError("已收藏，不能重复收藏"),
     ;
 
     private String message;

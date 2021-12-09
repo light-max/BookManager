@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">移动图书</string>
+    <string-array name="role">
+        <item>学生</item>
+        <item>教师</item>
+    </string-array>
 </resources>

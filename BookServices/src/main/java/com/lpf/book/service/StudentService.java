@@ -25,4 +25,6 @@ public interface StudentService extends IService<Student> {
     void setGender(String uid, Integer gender);
 
     void delete(String uid);
+
+    void setDesAndGender(String uid, String des, int gender);
 }

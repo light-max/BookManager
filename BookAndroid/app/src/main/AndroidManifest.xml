@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.lpf.book">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.移动图书">
+        android:theme="@style/Theme.移动图书"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -18,6 +26,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity android:name=".ui.shelf.BookShelfActivity" />
+        <activity android:name=".ui.people.PeopleActivity" />
+        <activity android:name=".ui.add.AddActivity" />
+        <activity android:name=".ui.add.recom.novel.RecomNovelActivity" />
+        <activity android:name=".ui.add.recom.book.RecomBookActivity" />
+        <activity android:name=".ui.details.book.BookDetailsActivity" />
+        <activity android:name=".ui.details.novel.NovelDetailsActivity" />
+        <activity android:name=".ui.read.ReadActivity" />
+        <activity android:name=".ui.people.uinfo.UserInfoActivity" />
+        <activity android:name=".ui.people.history.BorrowHistoryActivity" />
+        <activity android:name=".ui.people.download.DownloadActivity" />
+        <activity android:name=".ui.people.collect.CollectActivity" />
     </application>
 
 </manifest>

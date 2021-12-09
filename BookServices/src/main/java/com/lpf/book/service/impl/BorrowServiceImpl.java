@@ -9,6 +9,7 @@ import com.lpf.book.model.entity.Account;
 import com.lpf.book.model.entity.Book;
 import com.lpf.book.model.entity.Borrow;
 import com.lpf.book.model.request.StudentBorrowData;
+import com.lpf.book.model.result.BorrowDetails;
 import com.lpf.book.model.td.BorrowTD;
 import com.lpf.book.service.BorrowService;
 import org.springframework.stereotype.Service;
@@ -133,5 +134,32 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
         borrow.setStatus(2);
         borrow.setFinish(System.currentTimeMillis());
         updateById(borrow);
+    }
+
+    @Override
+    public List<BorrowDetails> getAllByStatus(String uid, Integer status) {
+        List<Borrow> borrows = list(new QueryWrapper<Borrow>()
+                .lambda()
+                .eq(Borrow::getUid, uid)
+                .eq(Borrow::getStatus, status));
+        return new ArrayList<BorrowDetails>() {{
+            for (Borrow b : borrows) {
+                long day = LocalDate.parse(b.getEnd(), dateFormat).toEpochDay() - LocalDate.parse(b.getBegin(), dateFormat).toEpochDay();
+                Book book = bookMapper.selectById(b.getBookId());
+                add(BorrowDetails.builder()
+                        .id(b.getId())
+                        .bookId(b.getBookId())
+                        .initiate(b.getInitiate())
+                        .finish(b.getFinish())
+                        .begin(b.getBegin())
+                        .end(b.getEnd())
+                        .name(book.getName())
+                        .author(book.getAuthor())
+                        .des(book.getDes())
+                        .cover("/cover/book/" + b.getBookId())
+                        .day((int) day)
+                        .build());
+            }
+        }};
     }
 }

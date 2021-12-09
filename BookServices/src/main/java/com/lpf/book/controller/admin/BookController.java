@@ -2,9 +2,11 @@ package com.lpf.book.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lpf.book.model.data.Pager;
+import com.lpf.book.model.data.Result;
 import com.lpf.book.model.entity.Book;
 import com.lpf.book.model.request.BookTempData;
 import com.lpf.book.model.request.BookUpdateData;
+import com.lpf.book.model.result.BookDetails;
 import com.lpf.book.service.BookService;
 import com.lpf.book.util.UseDefaultSuccessResponse;
 import com.lpf.book.util.ump.ViewModelParameter;
@@ -96,5 +98,11 @@ public class BookController {
     @UseDefaultSuccessResponse
     public void delete(Integer id) {
         service.delete(id);
+    }
+
+    @GetMapping("/book/details/{id}")
+    @ResponseBody
+    public Result<BookDetails> getDetails(@PathVariable Integer id) {
+        return Result.success(service.getBookDetails(id));
     }
 }

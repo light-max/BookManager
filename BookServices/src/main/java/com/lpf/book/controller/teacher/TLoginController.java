@@ -1,9 +1,13 @@
 package com.lpf.book.controller.teacher;
 
 import com.lpf.book.constant.GlobalConstant;
+import com.lpf.book.mapper.TeacherMapper;
 import com.lpf.book.model.data.Result;
 import com.lpf.book.model.entity.Account;
+import com.lpf.book.model.entity.Teacher;
 import com.lpf.book.service.LoginService;
+import com.lpf.book.service.TeacherService;
+import com.lpf.book.util.UseDefaultSuccessResponse;
 import com.lpf.book.util.ump.ViewModelParameter;
 import com.lpf.book.util.ump.ViewModelParameters;
 import org.springframework.stereotype.Controller;
@@ -11,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -19,6 +24,12 @@ import javax.servlet.http.HttpSession;
 public class TLoginController {
     @Resource
     LoginService service;
+
+    @Resource
+    TeacherMapper mapper;
+
+    @Resource
+    TeacherService teacherService;
 
     /**
      * 访问登陆页面
@@ -56,12 +67,16 @@ public class TLoginController {
      */
     @PostMapping("/teacher/login")
     @ResponseBody
-    public Result<Account> login(HttpSession session, String username, String pwd) {
-        Result<Account> result = service.admin(username, pwd);
+    public Result<Teacher> login(HttpSession session, String uid, String password) {
+        Result<Account> result = service.teacher(uid, password);
         if (result.isSuccess()) {
             session.setAttribute("teacher", result.getData());
+            Teacher teacher = mapper.selectById(result.getData().getUid());
+            GlobalConstant.dataNotExists.notNull(teacher);
+            return Result.success(teacher);
+        } else {
+            return Result.error(result.getMessage());
         }
-        return result;
     }
 
     /**
@@ -95,5 +110,15 @@ public class TLoginController {
     @ResponseBody
     public Result<Object> notLogin() {
         return Result.error(GlobalConstant.noAccess.getMessage());
+    }
+
+    @PostMapping("/teacher/info")
+    @ResponseBody
+    @UseDefaultSuccessResponse
+    public void setTeacherInfo(
+            @SessionAttribute("teacher") Account account,
+            String name, String des
+    ) {
+        teacherService.setNameAndDes(account.getUid(), name, des);
     }
 }

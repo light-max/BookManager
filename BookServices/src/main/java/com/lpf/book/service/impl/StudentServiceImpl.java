@@ -134,4 +134,13 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         accountMapper.deleteById(uid);
         removeById(uid);
     }
+
+    @Override
+    public void setDesAndGender(String uid, String des, int gender) {
+        Student student = getById(uid);
+        GlobalConstant.dataNotExists.notNull(student);
+        student.setDes(des);
+        student.setGender(gender);
+        updateById(student.check());
+    }
 }

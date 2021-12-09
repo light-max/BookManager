@@ -98,4 +98,13 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         GlobalConstant.dataNotExists.notNull(account);
         accountMapper.updateById(account.check());
     }
+
+    @Override
+    public void setNameAndDes(String uid, String name, String des) {
+        Teacher teacher = getById(uid);
+        GlobalConstant.dataNotExists.notNull(teacher);
+        teacher.setName(name);
+        teacher.setDes(des);
+        updateById(teacher.check());
+    }
 }

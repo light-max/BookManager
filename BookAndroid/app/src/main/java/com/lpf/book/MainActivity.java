@@ -1,14 +1,28 @@
 package com.lpf.book;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
-public class MainActivity extends AppCompatActivity {
+import com.lpf.book.base.activity.NoMvpActivity;
+import com.lpf.book.ui.login.LoginActivity;
+
+public class MainActivity extends NoMvpActivity {
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        hideActionBar();
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra(LoginActivity.auto, true);
+            startActivity(intent);
+            finish();
+        }, 1000);
     }
 }

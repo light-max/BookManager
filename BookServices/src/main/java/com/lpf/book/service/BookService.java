@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lpf.book.model.entity.Book;
 import com.lpf.book.model.request.BookTempData;
 import com.lpf.book.model.request.BookUpdateData;
+import com.lpf.book.model.result.BookDetails;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface BookService extends IService<Book> {
     void updateById(BookUpdateData data);
 
     void delete(Integer id);
+
+    BookDetails getBookDetails(Integer id);
 }

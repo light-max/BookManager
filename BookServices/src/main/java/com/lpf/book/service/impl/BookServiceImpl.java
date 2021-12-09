@@ -9,17 +9,24 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lpf.book.constant.GlobalConstant;
 import com.lpf.book.mapper.BookMapper;
 import com.lpf.book.model.entity.Book;
+import com.lpf.book.model.entity.Borrow;
 import com.lpf.book.model.request.BookTempData;
 import com.lpf.book.model.request.BookUpdateData;
+import com.lpf.book.model.result.BookDetails;
 import com.lpf.book.plugin.fieldcheck.FieldCheckException;
 import com.lpf.book.service.BookService;
+import com.lpf.book.service.BorrowService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 @Service
 public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements BookService {
+    @Resource
+    BorrowService service;
+
     @Override
     public Page<Book> query(Integer n, String name, String author, String des) {
         if (name == null && author == null && des == null) {
@@ -101,5 +108,22 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     @Override
     public void delete(Integer id) {
 
+    }
+
+    @Override
+    public BookDetails getBookDetails(Integer id) {
+        Book book = getById(id);
+        Borrow borrow = service.getOne(new QueryWrapper<Borrow>()
+                .lambda()
+                .eq(Borrow::getStatus, 1)
+                .eq(Borrow::getBookId, id));
+        return BookDetails.builder()
+                .id(id)
+                .name(book.getName())
+                .author(book.getAuthor())
+                .des(book.getDes())
+                .enable(borrow == null)
+                .cover("/cover/book/" + id)
+                .build();
     }
 }

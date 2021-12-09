@@ -18,4 +18,6 @@ public interface TeacherService extends IService<Teacher> {
     String getPassword(String uid);
 
     void setPassword(String uid, String password);
+
+    void setNameAndDes(String uid, String name, String des);
 }
