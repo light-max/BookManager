@@ -17,5 +17,6 @@ public class CollectActivity extends BaseActivity<CollectModel, CollectView> {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideActionBar();
+        getModel().getNovelCollect();
     }
 }

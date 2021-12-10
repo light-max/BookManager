@@ -1,5 +1,6 @@
 package com.lpf.book.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -138,10 +139,13 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
 
     @Override
     public List<BorrowDetails> getAllByStatus(String uid, Integer status) {
-        List<Borrow> borrows = list(new QueryWrapper<Borrow>()
+        LambdaQueryWrapper<Borrow> wrapper = new QueryWrapper<Borrow>()
                 .lambda()
-                .eq(Borrow::getUid, uid)
-                .eq(Borrow::getStatus, status));
+                .eq(Borrow::getUid, uid);
+        if (status != null) {
+            wrapper.eq(Borrow::getStatus, status);
+        }
+        List<Borrow> borrows = list(wrapper);
         return new ArrayList<BorrowDetails>() {{
             for (Borrow b : borrows) {
                 long day = LocalDate.parse(b.getEnd(), dateFormat).toEpochDay() - LocalDate.parse(b.getBegin(), dateFormat).toEpochDay();
@@ -158,6 +162,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
                         .des(book.getDes())
                         .cover("/cover/book/" + b.getBookId())
                         .day((int) day)
+                        .status(b.getStatus())
                         .build());
             }
         }};

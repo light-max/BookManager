@@ -1,4 +1,4 @@
-package com.lpf.book.ui.shelf.borrow;
+package com.lpf.book.ui.people.history;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -8,12 +8,10 @@ import com.lpf.book.api.ExRequestBuilder;
 import com.lpf.book.base.recycler.SimpleSingleItemRecyclerAdapter;
 import com.lpf.book.data.result.BorrowDetails;
 
-public class BorrowedBookAdapter extends SimpleSingleItemRecyclerAdapter<BorrowDetails> {
-    private OnRetuListener onRetuListener;
-
+public class BorrowHistoryListAdapter extends SimpleSingleItemRecyclerAdapter<BorrowDetails> {
     @Override
     protected int getItemViewLayout() {
-        return R.layout.item_borrowed_book;
+        return R.layout.item_borrow_book;
     }
 
     @Override
@@ -26,19 +24,7 @@ public class BorrowedBookAdapter extends SimpleSingleItemRecyclerAdapter<BorrowD
                 .setText(R.id.author, "作者：" + data.getAuthor())
                 .setText(R.id.initiate, "申请时间：" + data.getInitiateString())
                 .setText(R.id.finish, "受理时间：" + data.getFinishString())
-                .setText(R.id.borrow_time, "借阅时间：" + data.getBorrowTime());
-        holder.get(R.id.retu).setOnClickListener(v -> {
-            if (onRetuListener != null) {
-                onRetuListener.onRetu(data);
-            }
-        });
-    }
-
-    public void setOnRetuListener(OnRetuListener onRetuListener) {
-        this.onRetuListener = onRetuListener;
-    }
-
-    interface OnRetuListener {
-        void onRetu(BorrowDetails borrow);
+                .setText(R.id.borrow_time, "借阅时间：" + data.getBorrowTime())
+                .setText(R.id.status, data.getStatusString());
     }
 }

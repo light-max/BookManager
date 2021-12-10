@@ -17,4 +17,5 @@ public class BorrowDetails {
     private String des;
     private String cover;
     private Integer day;
+    private Integer status;
 }

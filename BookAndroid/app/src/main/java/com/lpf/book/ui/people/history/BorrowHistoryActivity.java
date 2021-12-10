@@ -17,5 +17,6 @@ public class BorrowHistoryActivity extends BaseActivity<BorrowHistoryModel, Borr
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideActionBar();
+        getModel().getBorrowHistory();
     }
 }

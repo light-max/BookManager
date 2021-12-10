@@ -79,10 +79,16 @@ public class NovelController {
     }
 
 
-    @PostMapping({"/admin/novel/read", "/teacher/novel/read", "/student/novel/read"})
+    @PostMapping({"/novel/read", "/novel/read", "/novel/read"})
     @ResponseBody
     @UseDefaultSuccessResponse
-    public void addNovelRead(String name) {
+    public void addNovelRead(
+            @SessionAttribute(value = "student", required = false) Account student,
+            @SessionAttribute(value = "teacher", required = false) Account teacher,
+            @SessionAttribute(value = "admin", required = false) Account admin,
+            String name
+    ) {
+        GlobalConstant.noAccess.isFalse(student == teacher && teacher == admin);
         readService.addCount(name);
     }
 

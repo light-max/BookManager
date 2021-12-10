@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Controller
-public class BorrowController {
+public class ABorrowController {
     @Resource
     BorrowService service;
 

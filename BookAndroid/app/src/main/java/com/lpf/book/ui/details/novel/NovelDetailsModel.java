@@ -7,7 +7,7 @@ import com.lpf.book.net.result.Result;
 import com.lpf.book.novel.FileManager;
 import com.lpf.book.novel.parser.OnlineNovelParser;
 import com.lpf.book.ui.read.ReadActivity;
-import com.lpf.book.uitls.IOUtils;
+import com.lpf.book.utils.IOUtils;
 
 import java.io.File;
 

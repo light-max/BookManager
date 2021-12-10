@@ -19,6 +19,8 @@ public class ReadActivity extends BaseActivity<ReadModel, ReadView> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int statusBarHeight = immersiveStatusBar();
+        addStatusBarFillView(statusBarHeight);
         hideActionBar();
     }
 

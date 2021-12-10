@@ -20,6 +20,7 @@ public class BorrowDetails {
     private String des;
     private String cover;
     private int day;
+    private int status;
 
     public int getId() {
         return id;
@@ -70,10 +71,27 @@ public class BorrowDetails {
     }
 
     public String getFinishString() {
+        if (finish == 0) {
+            return "未受理";
+        }
         return format.format(new Date(finish));
     }
 
     public String getBorrowTime() {
         return begin + "至" + end + " 共" + day + "天";
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getStatusString() {
+        return new String[]{
+                "请求中",
+                "已同意",
+                "已拒绝",
+                "已过期",
+                "已使用",
+        }[status];
     }
 }

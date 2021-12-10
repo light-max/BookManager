@@ -83,20 +83,20 @@ public class Api {
     }
 
     public static Async.Builder<?> toggleNovelCollect(String name) {
-        return ExRequestBuilder.post(("/student/collect"))
+        return ExRequestBuilder.post(("/collect"))
                 .param("name", name)
                 .async();
     }
 
     public static Async.Builder<Boolean> checkNovelCollect(String name) {
-        return ExRequestBuilder.get("/student/collect/check")
+        return ExRequestBuilder.get("/collect/check")
                 .param("name", name)
                 .<ExRequestBuilder>as()
                 .async(Boolean.class);
     }
 
     public static Async.Builder<List<Collect>> getNovelCollect() {
-        return ExRequestBuilder.get("/student/collect/all")
+        return ExRequestBuilder.get("/collect/all")
                 .asyncList(Collect.class);
     }
 
@@ -113,7 +113,7 @@ public class Api {
     }
 
     public static Async.Builder<?> addNovelReadNumber(String name) {
-        return ExRequestBuilder.post("/student/novel/read")
+        return ExRequestBuilder.post("/novel/read")
                 .param("name", name)
                 .async();
     }
@@ -126,16 +126,21 @@ public class Api {
     }
 
     public static Async.Builder<?> borrowBook(int id, int day) {
-        return ExRequestBuilder.post("/student/borrow")
+        return ExRequestBuilder.post("/borrow")
                 .param("bookId", id)
                 .param("day", day)
                 .async();
     }
 
     public static Async.Builder<List<BorrowDetails>> getBorrowedBookAll() {
-        return ExRequestBuilder.get(("/student/borrow/book/all"))
+        return ExRequestBuilder.get(("/borrow/book/all"))
                 .param("status", 1)
                 .<ExRequestBuilder>as()
+                .asyncList(BorrowDetails.class);
+    }
+
+    public static Async.Builder<List<BorrowDetails>> getBorrowHistory() {
+        return ExRequestBuilder.get("/borrow/book/all")
                 .asyncList(BorrowDetails.class);
     }
 
@@ -161,5 +166,19 @@ public class Api {
 
     public static Async.Builder<?> logout() {
         return ExRequestBuilder.post("/account/logout").async();
+    }
+
+    public static Async.Builder<?> retuBook(int borrowId) {
+        return ExRequestBuilder.post("/retu")
+                .param("borrowId", borrowId)
+                .async();
+    }
+
+    public static ExRequestBuilder getNovelPart(String name, int page, int size) {
+        return ExRequestBuilder.get(("/novel/part/{name}"))
+                .path("name", name)
+                .param("page", page)
+                .param("size", size)
+                .as();
     }
 }

@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 
 import com.lpf.book.R;
 import com.lpf.book.base.activity.BaseActivity;
+import com.lpf.book.ui.shelf.novel.NovelShelfFragment;
 
 public class DownloadActivity extends BaseActivity<DownloadModel, DownloadView> {
     @Override
@@ -17,5 +18,8 @@ public class DownloadActivity extends BaseActivity<DownloadModel, DownloadView> 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideActionBar();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new NovelShelfFragment())
+                .commit();
     }
 }

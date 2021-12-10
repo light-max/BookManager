@@ -7,4 +7,21 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <integer-array name="textColors">
+        <item>0xff585858</item>
+        <item>0xffABB2BF</item>
+        <item>0xffD4D4D4</item>
+        <item>0xff333333</item>
+        <item>0xffD3AF86</item>
+    </integer-array>
+
+    <integer-array name="backgroundColors">
+        <item>0xffFDF6E3</item>
+        <item>0xff222322</item>
+        <item>0xff282C34</item>
+        <item>0xff1E1E1E</item>
+        <item>0xffF5F5F5</item>
+        <item>0xff221A0F</item>
+    </integer-array>
 </resources>
